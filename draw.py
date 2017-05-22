@@ -17,7 +17,7 @@ def draw_polygons( matrix, screen, color ):
     while point < len(matrix) - 2:
 
         normal = calculate_normal(matrix, point)[:]
-        print normal
+        #print normal
         if normal[2] > 0:
             draw_line( int(matrix[point][0]),
                        int(matrix[point][1]),
@@ -175,7 +175,7 @@ def generate_torus( cx, cy, cz, r0, r1, step ):
     circ_start = 0
     circ_stop = num_steps
 
-    print num_steps
+    #print num_steps
     
     for rotation in range(rot_start, rot_stop):
         rot = step * rotation
@@ -296,3 +296,32 @@ def draw_line( x0, y0, x1, y1, screen, color ):
     else:
         #octant 2
         if A > 0:
+            d = A/2 + B
+
+            while y < y1:
+                plot(screen, color, x, y)
+                if d < 0:
+                    x+= 1
+                    d+= A
+                y+= 1
+                d+= B
+            #end octant 2 while
+            plot(screen, color, x1, y1)
+        #end octant 2
+
+        #octant 7
+        else:
+            d = A/2 - B;
+
+            while y > y1:
+                plot(screen, color, x, y)
+                if d > 0:
+                    x+= 1
+                    d+= A
+                y-= 1
+                d-= B
+            #end octant 7 while
+            plot(screen, color, x1, y1)
+        #end octant 7
+    #end octants 2 and 7
+#end draw_line
