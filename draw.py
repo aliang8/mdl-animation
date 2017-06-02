@@ -2,6 +2,7 @@ from display import *
 from matrix import *
 from math import *
 from gmath import *
+import random
 
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0);
@@ -13,6 +14,9 @@ def draw_polygons( matrix, screen, color ):
         print 'Need at least 3 points to draw'
         return
 
+    r = 255
+    g = 255
+    b = 0
     point = 0    
     while point < len(matrix) - 2:
 
@@ -33,9 +37,64 @@ def draw_polygons( matrix, screen, color ):
                        int(matrix[point][1]),
                        int(matrix[point+2][0]),
                        int(matrix[point+2][1]),
-                       screen, color)    
+                       screen, color)
+
+            ptYs = [matrix[point], matrix[point+1], matrix[point+2]]
+            ptYs = sorted(ptYs, key = lambda x:(x[1],x[0]))
+            scanline(screen, ptYs, [r,g,b])
+
+
+            r = random.randint(0, 256) % 256
+            g = random.randint(0, 256) % 256
+            b = random.randint(0, 256) % 256
+
         point+= 3
 
+def scanline( screen, points, color):
+    
+    lowX = points[0][0]
+    lowY = points[0][1]
+    midX = points[1][0]
+    midY = points[1][1]
+    topX = points[2][0]
+    topY = points[2][1]
+            
+    x0 = lowX
+    d_x0 = float((topX-lowX)/(topY-lowY))
+    
+    if int(lowY) != int(midY):
+        x1 = lowX
+    else:
+        x1 = midX
+
+    if lowY != midY:
+        d_x1 = float((midX-lowX)/(midY-lowY))
+    else:
+        d_x1 = float((topX-lowX)/(topY-lowY))
+    
+    y = lowY
+    i = 0
+    while y < topY:
+
+        draw_line(int(x0),int(y),int(x1),int(y),screen,color)
+        
+        if (y < midY and midY-y < 1):
+            y = midY
+            x1 = midX
+            x0 += d_x0
+            draw_line(int(x0),int(y),int(x1),int(y),screen,color)
+        
+        if y == midY:
+            x1 = midX
+            if topY != midY:
+                d_x1 = float((topX-midX)/(topY-midY))
+            else:
+                d_x1 = float((topX-lowX)/(topY-lowY))
+                
+        x0 += d_x0
+        x1 += d_x1
+        y += 1
+        i += 1
 
 def add_box( polygons, x, y, z, width, height, depth ):
     x1 = x + width

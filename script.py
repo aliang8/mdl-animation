@@ -188,9 +188,8 @@ def run(filename):
                 draw_polygons(tmp, screen, color)
                 tmp = []
             elif c == 'move':
-                knob = args[3]
-
-                if knob:
+                if args[3]:
+                    knob = args[3]
                     x = knobs[i][knob] * args[0]
                     y = knobs[i][knob] * args[1]
                     z = knobs[i][knob] * args[2]
@@ -201,9 +200,8 @@ def run(filename):
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'scale':
-                knob = args[3]
-
-                if knob:
+                if args[3]:
+                    knob = args[3]
                     x = knobs[i][knob] * args[0]
                     y = knobs[i][knob] * args[1]
                     z = knobs[i][knob] * args[2]
@@ -214,9 +212,8 @@ def run(filename):
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
             elif c == 'rotate':
-                knob = args[2]
-
-                if knob:
+                if args[2]:
+                    knob = args[2]
                     theta = knobs[i][knob] * args[1]
                     args = (args[0], theta, knob)
                 
